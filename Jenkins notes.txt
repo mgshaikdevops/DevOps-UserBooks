@@ -47,15 +47,3 @@ yum install java-1.8.0-openjdk
 
 
 
-
-
-
-
-Thanks & Regards,
-
-*Ajitha Gomathi*
-*WEZVA Coordinator* | Mob : +91-9739110917
-
-
-
-
