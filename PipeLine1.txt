@@ -291,6 +291,19 @@ pipeline
 ------------------------------------------------------------------------
 
 pipeline
+{
+  agent {label 'Build'}
+  options {retry(3)}
+
+  stages
+      {
+        stage('Build')
+            {
+              steps { sh  }
+            }
+      }
+}
+
 
 
 

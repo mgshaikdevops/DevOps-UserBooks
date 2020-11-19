@@ -1,0 +1,327 @@
+=======================
+VERSION CONTROL SYTEM
+=======================
+
+Oct2020 Central Repo:	https://github.com/mgshaikdevops/Oct2020.git
+
+===============
+Configuration:
+===============
+git config --global user.name "mgshaikdevops"
+git config --global user.email "mgshaikdevops@gmail.com"
+git config --global push.default "simple"
+
+========================
+User/Developer Workflow
+========================
+
+git clone https://github.com/mgshaikdevops/Oct2020.git  [path to download]
+
+create a file and check status 
+you can also create a directory and add the files inside the directory
+git add [file] or add . [all files to add ]
+git commit -m "first commit" or second ,thirt etc
+
+git log [for all commit id's] 
+git log -1 [for one and latest commit id]  
+git log --oneline [it will show only single line view]
+git log --oneline [for one and latest commit id]
+git log -num
+git show <commit id>
+
+======================================================================================
+PUSH TO THE CENTRAL REPOSITORY ONLY WHEN YOU FINISH with your work in local repository
+======================================================================================
+git push OR origin master
+git pull [we have to use pull when we have to update every file from different workspaces]
+
+
+==========================================
+BRANCHES switching, Merging and Deleting
+==========================================
+
+git branch [to check on which branch you are]
+
+git branch <new branch name> [to create a new branch]
+when you create a new branch at that time it will add all the files from the parent branch 
+
+git checkout <branch name> [checkout we use for switching from one branch to another branch]
+[When you create some files in a branch those files will only be in that perticular branch]
+
+git merge <source branch> <destination branch(normally it is master in most cases)>
+[it will merge all the files from that branch]
+
+[always go to destination(master will be destination branch in most cases) branch and from there you run the command]
+[when you are in destination branch just give source branch]
+git merge <source branch>
+
+when you merge it will ask you to write a commit message for your reference then save it in default editor
+
+when you want to merge the same file from the different branches there will be a CONFLIX in that case if it is in 
+-->local repository then it will be a developer most of the time so he must know which one to merge OR if there is some changes then he must do manual merge in the editor and after that file he must commit.
+-->central repository then you must ask for the owner of the repository or who worked with that file.
+
+
+git cherry-pick <commitID> 
+[to merge only single file from that branch for that you must go to the perticular branch and find the commitID]
+
+git branch -d test
+
+
+when you fnish writing your scripts you have to do UNIT TEST.
+
+=====================
+STASH (BACKUP & UNDO)
+=====================
+
+create stash, remove changes from working directory
+git stash
+
+to list all stash available for the repository
+git stash list
+
+reapply the changes, remove stash
+git stash pop
+
+apply a specific stash from repo
+git stash apply stash@{IndexNumber}
+
+Idea22 | Idea11 |      |
+Index0   Index1	 Index2  Index3
+
+remove stash from repo
+git stash clear
+
+=============
+RESET [undo]
+=============
+
+git reset --soft (repository reference)
+git reset --mixed (repo+staging area)
+git reset --hard (repo+SA+WorkingDirectory)
+
+=====
+TAGS
+=====
+
+Git has the option to tag a commit in the repository history so that you find it easier at a later point in time.
+
+apply tag to a commit:
+git tag -a <pattern> -m 'comment' <commitid>
+
+contetns of the tag:
+git show <pattern>
+
+display list of tags available:
+git tag
+
+push the tags:
+git push --tags
+
+deletea tag:
+git tag -d <tag> 
+
+=======
+REBASE
+=======
+step1:
+create test branch
+create a commit ID on master
+create 2 commit ID's on test
+rebase
+git checkout test
+git rebase master
+
+step2:
+git checkout master
+git rebase test
+
+=========================================
+PUSH/PULL changes other than central repo
+=========================================
+
+list the remote reference
+git remote -v
+
+add a new remote reference
+git remote add <ReferenceName> <NewRemoteURL>
+
+checkout the source repo branch to a non working branch
+git checkout <branch>
+
+pull a change:
+git pull <ReferenceName> <Branch>
+
+push a change
+git push <ReferenceName> <Branch>
+
+
+Central Repo (BARE) : Store and share
+Local Repo (NONBARE): Modify, store and share
+
+====================
+BUILD MANAGEMENT
+====================
+
+A process where we convert the raw code written by devopers in any of the programming language and converting them in to a machine understanble format and later on we assemble all the files which we have converted in to the machine understanble format and from that we create a software together that complete process we call it as build management or building a product.
+
+===============
+build process : 2 steps
+===============
+1.compilation: converting java files into class files we call it as compilation.
+2.assembly: creating jar[java archaea]/war[web archaea]/ear[enterprise archaea]
+
+compilation : raw source code ---> object files(binary files) 
+assembly 
+
+compilation ---> object files(binary files) ---> Packeging ---> Deliverables(JAR, WAR) Build Artifact(application)(machine readable format))
+
+==========================================================================
+MAVEN - Project Management Tool - Build tool - Dependency Management Tool
+==========================================================================
+
+Maven takes care of complete dependency of our project and it works as a depency management system.
+
+pom.xml: every project must have Maven configuration file along with java files that file we call it as pom.xml
+
+=============
+install java: 
+=============
+apt update
+apt install -y openjdk-8-jdk
+java -version
+
+==============
+install maven:
+==============
+apt update 
+apt install maven
+mvn -version
+
+Create a template of a project:
+=================================
+mvn archetype:generate
+
+mvn compile
+mvn test
+mvn package
+mvn install [install step we have to do it only when we want to share the project]
+mvn deploy
+mvn clean [delete the entire target folder to clean the workspace]
+
+======================
+CONTINUOS DEVELOPMENT
+======================
+
+Release planning
+agile scrum sprint planning
+setup distributed version control system
+branching strategy
+define developer workflow policies
+dockerize the components/product.
+
+TOOLS: GIT - GITHUB - GITLAB - JIRA - DOCKERFILE -JBOSS
+
+=======
+GITLAB
+=======
+Create account in gitlab.com - cloud
+add an public ssh key (~/.ssh/id_rsa.pub)
+create a project (central repository)
+import project
+add members
+give project level permissions
+create branches
+protect branches
+backup & restore (https://docs.gitlab.com/eeraketasks/backup restore.html)
+  sudo gitlab-rake gitlab:backup:create
+
+====================================================
+GITLAB: https://gitlab.com/mgshaikdevops/oct2020.git
+====================================================
+
+===========
+CI PROCESS
+===========
+
+once developer writes the code(jar,war and etc) he will do the unit test and then he will be checking in the code and he will be pushing the code.
+
+when the developer writes the code in to the repository that will be called as source code.
+
+==============
+BUILD PROCESS: 
+==============
+software build is a process where we convert the raw source code in to the binary format file which machines can understand.
+
+binary format file : we call this as application 
+
+===============
+DEVELOPER BUILD
+===============
+gitlab ---> clone ---> source code ---> build 2 steps ---> compilation ---> object files(binary files) ---> Packeging ---> Artifact(application)(jar,war etc) --->  Unit Test(Developer will test after the Artifact(machine readable format)) ---> check in and push to central repository
+
+collection of obj files we call it as deliverable artifact. 
+
+Package: combining all the obj files and create a single package.
+
+===================================================
+Nightly Build or Full Product Build or Formal Buid
+===================================================
+gitlab ---> clone ---> source code ---> build 2 steps ---> compilation ---> object files(binary files) ---> Packeging ---> Deliverables(JAR, WAR) Build Artifact(application)(machine readable format)) ---> THEN GIVE TO THE CUSTOMER.
+
+When we build we get either JAR OR WAR file.
+JAR: JAVA ARCHAEA
+WAR: WEB ARCHAEA
+EAR: ENTERPRISE AECHAEA
+
+=============
+TESTING TYPES
+=============
+unit testing: done by developers
+------------
+integration testing: done by automated process [developer if he knows or devops enginner]
+--------------------
+system testing: done by QA testing team
+---------------
+regression testing:  
+-------------------
+quick round of testing in which you are going to check weather your old functionties are also working along with the new functionality. u need to merge the code and generate a new build to do this..
+
+user aceeptance testing: 
+------------------------
+before giving it to the customer we check the final testing with a customer(by invitation) (beta versions released called as user acceptance testing)
+
+=========
+Jenkins
+=========
+
+sudo apt update
+sudo apt install -y openjdk-8-jdk
+
+sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
+    /etc/apt/sources.list.d/jenkins.list'
+
+sudo apt update
+sudo apt install -y jenkins
+
+systemctl status jenkins 
+systemctl start jenkins
+systemctl stop jenkins
+systemctl restart jenkins
+
+On Master:
+sudo  
+
+Setup Passwordless SSH between Jenkins Master & Slave
+Take the content of ~/.ssh/id_rsa.pub (as ubuntu user) from master
+Put it in ~/.ssh/authorized_keys on slave as ubuntu user
+
+Setup Slave on Jenkins
+ Add new node & make sure the Remote Root Directory has read/write permission for Ubuntu user
+Choose Launch method as "SSH"
+Give the private IP of the EC2 slave for "Host"
+Add Credentials, choose Kind as "SSH Username with private key"
+Give user name as "ubuntu" & put the content of "~/.ssh/id_rsa" from master as ubuntu & put it as private key content
+Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"	
