@@ -1,0 +1,371 @@
+PIPELINE : 
+=========================================
+agent-->stages-->stage-->steps
+agent-->stages-->stage-->agent-->steps
+
+======================================================================================
+agent-->stages-->stage-->agent-->node-->label 'Build' customworkspace '/tmp/' -->steps
+======================================================================================
+agent--> environment-->stages-->stage-->steps
+agent--> environment-->stages-->stage-->environment-->steps
+===========================================================
+
+==============================================
+directives: parameters
+agent-->parameters-->stages-->stage-->steps-->
+parameters
+      {
+        string(name: 'PERSON', defaultValue: 'Shaik', description: 'who are you?')
+        text(name: 'BIOGRAPTHY', defaultValue: 'Iam an Indian', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: 'true', description:'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One','Two','Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        file(name: 'FILE', description: 'Choose a file to upload')
+      }
+
+steps
+      {
+        echo "Hello ${params.PERSON}"
+        echo "Biography: ${params.BIOGRAPTHY}"
+        echo "Toggle: ${params.TOGGLE}"
+        echo "Choice: ${params.CHOICE}"
+      }            
+============================================================
+build discarder :
+agent-->options-->buildDiscarder-->stages-->stage-->steps
+[ options { buildDiscarder(logRotator(numToKeepStr: '5'))} ]
+============================================================
+RETRY:
+agent-->options-->retry-->stages-->stage-->steps
+[ options {retry(3)}      ]
+[ sh 'waitfor test /t 10' ]
+=========================================================
+
+
+pipeline
+{
+     agent any     
+        stages
+        {
+          stage('Stage1') 
+            {
+              steps { echo "First stage" }
+            }
+        }             
+}
+------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'} 
+  stages
+  {
+        stage('stage1')
+        {
+          steps { echo "First Stage" }
+        }  
+        stage('stage2')
+        { 
+          steps { echo "Second Stage" }
+        }      
+  }
+}
+
+--------------------------------------------------------------
+pipeline
+{
+  agent { label 'Build'}
+  stages
+  {
+      stage('stage1')
+      { 
+      steps { echo "First Stage" }
+      }
+      
+      stage('stage2')
+      { 
+      steps { echo "Second Stage" }
+      }
+  }
+}
+
+---------------------------------------------------------------
+
+pipeline
+{
+  agent none
+  stages
+  {
+      stage('stage1')
+      { 
+      steps { echo "First Stage" }
+      }
+      
+      stage('stage2')
+      { 
+      steps { echo "Second Stage" }
+      }
+  }
+}
+
+--------------------------------------------------------------------
+
+pipeline
+{
+    agent { label 'Build'}
+    stages
+        {
+            stage('Stage1')
+              {
+                  agent { label 'Test'}
+                  steps { echo "First Stage" }
+              }
+
+            stage('Stage2')
+              {
+                  agent { label 'Build'}
+                  steps { echo "Second Stage" }
+              }
+        }
+
+}
+
+----------------------------------------------------------------------
+
+pipeline
+{
+    agent none
+    stages
+        {
+            stage('Stage1')
+              {
+                  agent { label 'Build'}
+                  steps { echo "First Stage" }
+              }
+
+            stage('Stage2')
+              {
+                  agent any 
+                  steps { echo "Second Stage" }
+              }
+        }
+
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+    agent none
+    stages
+      {
+          stage('Stage1')
+            {
+              agent
+                {
+                  node
+                    { 
+                        label 'Build' 
+                        customWorkspace '/tmp' 
+                    }
+                }
+                
+              steps { echo "First Stage" }
+            }
+          
+          stage('Stage2')
+            {
+              agent any
+              steps { echo "Second Stage" }
+            }
+      }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+    agent {label 'Build'}
+    environment { MYNAME='Shaik' }
+    
+    stages
+    {
+        stage('Build')
+        {
+          steps { sh "echo 'Your Name: $MYNAME' " }
+        }
+    }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Test' }
+  environment {MYNAME='Shaik'}
+  
+  stages
+  {
+    stage('Build')    
+    {
+      agent { label 'Build' }
+      steps { sh "echo Your Name: $MYNAME" }
+    }
+
+    stage ('Test')
+    {
+      agent { label 'Test' }
+      steps { echo env.MYNAME }
+    }
+  }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  environment { VARVAL = 'global' }
+
+  stages
+  {
+    stage('Build')
+    {
+      environment { VARVAL = 'local'}
+      steps { sh "echo 'Your Name: $VARVAL' " }
+    }
+
+    stage('Test')
+    { steps { echo env.VARVAL } }
+
+  }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+  agent {label 'Build'}
+  parameters
+      {
+        string(name: 'PERSON', defaultValue: 'Shaik', description: 'who are you?')
+        text(name: 'BIOGRAPTHY', defaultValue: 'Iam an Indian', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: 'true', description:'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One','Two','Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        file(name: 'FILE', description: 'Choose a file to upload')
+      }
+
+  stages
+    {
+      stage('Build')
+      { 
+        steps
+            {
+              echo "Hello ${params.PERSON}"
+              echo "Biography: ${params.BIOGRAPTHY}"
+              echo "Toggle: ${params.TOGGLE}"
+              echo "Choice: ${params.CHOICE}"
+            }
+      }      
+    }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Test' }
+  
+  options{ buildDiscarder(logRotator(numToKeepStr: '5')) }
+
+  stages
+      {
+        stage('Test')
+        {
+          steps{ echo "First Test" }
+        }
+      }
+}
+
+------------------------------------------------------------------------
+
+pipeline
+
+
+
+
+
+
+
+
+
+
+
+pipeline {
+  agent none
+  options {
+     timeout(time: 1, unit: 'HOURS')
+   }
+
+  parameters {
+    booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+	  booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')
+  }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'Test' }
+       steps { 
+          git branch: 'master', url: 'https://gitlab.com/mahammed_ghouse_shaik/project_demo.git'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'Test' }
+   when { 
+     anyOf {
+           changeset "samplejar/**"
+           changeset "samplewar/**"
+     }
+   }
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+  stage('Build Artifacts')
+  {
+   agent { label 'Test' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps { 
+     script {
+	    if (params.UNITTEST) {
+		  unitstr = ""
+		} else {
+		  unitstr = "-Dmaven.test.skip=true"
+		}
+	
+		echo "Building Jar Component ..."
+		dir ("./samplejar") {
+		   sh "mvn clean package ${unitstr}"
+		}
+
+		echo "Building War Component ..."
+		dir ("./samplewar") {
+           sh "mvn clean package "
+		}
+	 }
+   }
+  }
+ 
+  
+ 
+ }
+}
