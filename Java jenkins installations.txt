@@ -1,0 +1,77 @@
+Class 9 Notes: June 16th
+==================
+
+===================
+Java UBUNTU INSTALLATION
+===================
+
+sudo apt update
+sudo apt install -y openjdk-8-jdk
+
+sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
+    /etc/apt/sources.list.d/jenkins.list'
+
+sudo apt update
+sudo apt install -y jenkins
+
+systemctl status jenkins 
+systemctl start jenkins
+systemctl stop jenkins
+systemctl restart jenkins
+
+==============================================
+Windows Linux Subsystem jenkins installation:
+==============================================
+sudo apt update
+sudo apt install default-jdk default-jre
+javac
+sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+sudo sh -c "echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list"
+sudo apt update
+sudo apt install jenkins
+sudo /etc/init.d/jenkins start
+sudo /etc/init.d/jenkins stop or status|restart|force-reload
+http://{your_ip}:8080 
+search ip command: hostname -i
+sudo more /var/lib/jenkins/secrets/initialAdminPassword
+
+LINK: https://medium.com/try-except-finally/install-jenkins-on-wsl-ubuntu-d6cfeec8cd60
+
+On Master:
+ssh-keygen -t rsa  
+
+Setup Passwordless SSH between Jenkins Master & Slave
+Take the content of ~/.ssh/id_rsa.pub (as ubuntu user) from master
+Put it in ~/.ssh/authorized_keys on slave as ubuntu user
+
+Setup Slave on Jenkins
+ Add new node & make sure the Remote Root Directory has read/write permission for Ubuntu user
+Choose Launch method as "SSH"
+Give the private IP of the EC2 slave for "Host"
+Add Credentials, choose Kind as "SSH Username with private key"
+Give user name as "ubuntu" & put the content of "~/.ssh/id_rsa" from master as ubuntu & put it as private key content
+Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"
+
+===============
+jenkins status:
+systemctl status jenkins systemctl start jenkins
+================================================
+
+
+===================
+Java CENTOS INSTALLATION
+===================
+
+yum -y update
+yum install java-1.8.0-openjdk
+
+
+
+
+
+
+
+
+

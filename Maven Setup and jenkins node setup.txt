@@ -1,0 +1,30 @@
+Maven Setup and jenkins node setup:
+===================================
+
+mkdir /tmp/jenkins
+chmod 777 /tmp/jenkins
+
+sudo apt update
+sudo apt install default-jdk
+
+=============================================
+Setting the JAVA_HOME Environment Variable
+=============================================
+
+cd /usr/local
+sudo wget https://mirrors.dotsrc.org/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+sudo tar zxf apache-maven-3.6.3-bin.tar.gz
+sudo ln -s apache-maven-3.6.3 maven
+export M2_HOME=/usr/local/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+=======================
+after the restart only 
+=======================
+
+cd /usr/local
+export M2_HOME=/usr/local/maven
+export PATH=${M2_HOME}/bin:${PATH}
+
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
+source /etc/environment
