@@ -387,26 +387,291 @@ pipeline
       }
 }
 
------------------------------------------------------------------------------------------------
+---------------------------upstream(build after other projects are built)----------------------------------------
+
+pipeline
+{
+    agent { label 'Build' }
+    triggers  { upstream(upstreamProjects: 'FirstJob,MavenProject', threshold: hudson.model.Result.SUCCESS) }
+
+    stages
+        {
+            stage('Build')
+              {
+                steps { echo 'test' }
+              }
+        }
+}
+
+------------------------------------directives:steps----------------------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+    stages
+        {
+            stage('CloneRepo')
+               {    
+                    steps
+                        {
+                            echo 'Going to Checkout from git'
+                            git 'https://github.com/mgshaikdevops/MavenProject.git'
+                            echo 'Completed Checkout from git'
+                        }
+                }
+        }
+}
+
+-----------------triggers a new build for a given downstream job & waits for its completion -------------------------------
+
+pipeline
+{
+  agent { label 'Test'}
+  stages
+        {
+            stage('CIFeatX')
+                {
+                  steps { build 'CI-Job-FeatX'}
+                }
+
+            stage('Test')
+                {
+                  steps { echo 'Testing' }
+                }
+        }
+}
+
+-----------------------------------------mail: sending email-------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+
+    stages
+          {
+              stage('Test')
+                  {
+                    steps 
+                        {
+                          mail bcc: 'smgouse@gmail.com', body: 'hi', cc: 'gousefx@gmail.com', from: '', replyTo: '', subject: 'Regardig Jenkins Automation ', to: 'mgshaik1@gmail.com'
+                        }
+                  }
+          }
+}
+
+------------------------------------change current directory---------------------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+
+    stages
+        {
+            stage('Test')
+                {
+                    steps 
+                      {
+                          sh 'touch first'
+                          dir('/tmp/jenkins')
+                            {
+                              sh 'touch testme'
+                              sh 'touch testme2'
+                            }
+                          sh 'touch testlast' 
+                      }
+                }
+        }
+}
+
+---------------------------------directives when --------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Test'}
+  environment { DEPLOY_TO = 'QA'}
+
+  stages
+        {
+          stage('Test')
+              {
+                when { environment name: 'DEPLOY_TO', value: 'QA ' }
+                steps { echo 'Running Test for QA' }
+              }
+          stage('Deploy')
+              {
+                when { environment name:'DEPLOY_TO', value:'Production'}
+                steps { echo 'Running Deploy for Production'}
+              }
+        }
+  
+
+}
+
+-------------------------------parameters booleanParam-------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Deploy'}
+  parameters { booleanParam defaultValue: true, description: 'Toggle this value', name: 'TOGGLE'}
+  stages
+        {
+          stage('Deploy')
+          {
+            when {expression {return params.TOGGLE}}
+            steps { echo 'Testing'}
+          }
+        }
+}
+---------------------------------parameters when condition allOf-------------------------------------------------------
+
+pipeline
+{
+  agent {label 'Deploy'}
+  parameters 
+          {
+            string (defaultValue: 'Shaik', description: 'Who are you?', name: 'Person', trim: false)
+            booleanParam (defaultValue: true, description: 'Toggle this value', name: 'TOGGLE')
+          }
+
+  stages
+        {
+          stage('Deploy')
+                {
+                  when 
+                    {
+                      allOf 
+                          {
+                            equals expected: 'Shaik', actual:params.PERSON
+                            expression {return params.TOGGLE}
+                          }
+                    }
+                  steps {echo 'hi Shaik'}
+                }
+        }
+}
+
+---------------------------------parallel stages-----------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('stage1') 
+              {
+                  steps { sh 'sleep 10'}
+              }
+          stage('stage2')
+              {
+                  steps { sh 'sleep 10'}
+              }
+          stage('stage3')
+              {
+                parallel
+                  {
+                    stage('stage3.1')
+                    {
+                      steps { sh 'sleep 10'}
+                    }
+                    stage('stage3.2')
+                    {
+                      steps { sh 'sleep 10'}
+                    }
+                  }
+              }
+        }
+}
+
+-----------------------------------post-----------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('Example')
+          {
+            steps { echo 'Hello Shaik'}
+          }
+        }
+  post
+      {
+        always  { echo 'Hello Shaik again'}
+      }
+}
+
+----------------------------------------------------------------------------------
 
 
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('Example')
+          {
+            steps { echo 'Hello Shaik'}
+            post
+                {
+                    always  { echo 'Hello Shaik again'}
+                }
+          }
+          stage('Example2')
+          {
+            steps { echo 'Hello Shaik again'}
+          }
+        }
+}
 
 
+----------------------------------gitlab project----------------------------------------------------------
 
+pipeline
+{
+  agent none
+  stages
+   {
+        stage('Checkout')
+          {
+               agent any
+               steps { git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/cicd-project.git' }
+          }
+    
+        stage('PreCheck')
+          {
+              agent any
+               when 
+                 { 
+                   anyOf
+                     {
+                       changeset "samplejar/**"
+                       changeset "samplewar/**"
+                     }
+                 }
+               steps 
+                  {
+                    script { env.BUILDME = "yes" // Set env variable to enable further Build Stages }
+                  }
+          }
 
+        stage('Build Artifacts')
+          {
+              agent any
+              when {environment name: 'BUILDME', value: 'yes'}
+              steps
+                  {   
+                    echo "Building Jar Component ..."
+                    dir("./samplejar")
+                      { sh "mvn clean package ${unitstr}" }
 
+                    echo "Building War Component ..."
+                    dir ("./samplewar")
+                      { sh "mvn clean package " }
+                  }
+          }
 
-
-
-
-
-
-
-
-
-
-
-
+    }
+}
 
 
 

@@ -306,10 +306,10 @@ sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
 sudo apt update
 sudo apt install -y jenkins
 
-systemctl status jenkins 
-systemctl start jenkins
-systemctl stop jenkins
-systemctl restart jenkins
+sudo systemctl status jenkins 
+sudo systemctl start jenkins
+sudo systemctl stop jenkins
+sudo systemctl restart jenkins
 
 ==============================================
 Windows Linux Subsystem jenkins installation:
@@ -529,3 +529,121 @@ jenkins pipeline:
 Pipeline---> Agent[globala value] --> Stages --> Steps
 
 pipeline
+
+==================
+logical Operators
+==================
+AND : all of 
+------------
+true AND true 	= true
+true AND false  = false
+false AND true 	= false
+false AND false = false
+-------------
+OR  : any of
+-------------
+true OR true 	= true
+true OR flase 	= true
+false OR true 	= true
+false OR false 	= false
+
+==================
+parallel stages
+===================
+Stages in Declarative Pipeline may declare a number of nested stages within them, which will be
+executed in parallel. Note that a stage must have one and only one of either steps or parallel. The
+nested stages cannot contain further parallel stages themselves, but otherwise behave the same as
+any other stage. Any stage containing parallel cannot contain agent or tools, since those are not
+relevant without steps.
+In addition, you can force your parallel stage`s to all be aborted when one of them fails, by
+adding `failFast true to the stage containing the parallel.
+
+======
+post
+======
+The post section defines one or more additional steps that are run upon the completion of a
+Pipeline’s or stage’s run (depending on the location of the post section within the Pipeline). post can
+support one of the following post-condition blocks: always, changed, failure, success, unstable, and
+aborted. These condition blocks allow the execution of steps within the post section depending on
+the completion status of the Pipeline or stage.
+
+------------
+mvn package
+------------
+* compile
+* unit test
+* package
+
+
+=========================   =================================
+
+
+
+==================================	 CONTAINER MANAGEMENT  [DOCKER ]       ================================================================
+
+sudo apt update
+sudo apt install -y docker.io
+docker info
+
+free -m
+cat /etc/os-release
+df -kh .
+ps -ef
+
+
+docker images
+docker ps 
+docker ps -a
+exit -- container will stop
+
+docker run --name <CONTAINERNAME> -it <ImageName> <FIRSTCOMMAND>
+
+   *	download the image from the Docker registry [DockerHub]
+   *	create a new container
+   *	unique id assigned to the container
+   *	container will be started
+   
+   *	attach the container to the terminal interactively
+   		docker run -it centos 							-------interactively-----
+   		
+   *	FIRST COMMAND/SRICPT/APPLICATION WILL BE EXECUTED[/bin/bash will be default if you dont give anything]
+		docker run -it centos /bin/bash						-------First command--------
+		
+   *	Change Container name [--name <CONTAINERNAME>]					-----Change Container name-----
+   		docker run --name FirstContainer -it centos /bin/bash
+   	
+   	
+ -----------------------Start Container again after exit(stopping) -----------------------------------
+   	
+   	docker start <ContainerID|ContainerName>		-------container will start only but not interactively----------
+   *		docker start FirstContainer
+   	
+   	docker attach <ContainerID|ContainerName>		------- container will enter interactively----------
+   *		docker attach FirstCOntainer			------- (make sure add interactively while creating container)-------
+	
+	docker stop <ContainerID|ContainerName>			------- container will stop only-----------------
+   *		docker stop FirstContainer			------ We can use 'exit' only when we go interactively-------------
+   
+   *	docker rm <ContainerID|ContainerName>			------ delete container-----------------
+   		docker rm FirstContainer			------ Must stop before you delete the container ------------
+
+   *	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
