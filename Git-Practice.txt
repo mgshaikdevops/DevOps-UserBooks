@@ -2,7 +2,7 @@
 VERSION CONTROL SYTEM
 =======================
 
-Oct2020 Central Repo:	https://github.com/mgshaikdevops/Oct2020.git
+Oct2020 Central Repo:	https://github.com/mgshaikdevops/Oct2020.git 
 
 ===============
 Configuration:
