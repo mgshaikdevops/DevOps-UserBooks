@@ -596,6 +596,9 @@ docker ps
 docker ps -a
 exit -- container will stop
 
+
+-----------------------------------  Creating Container ------------------------------------------------------
+
 docker run --name <CONTAINERNAME> -it <ImageName> <FIRSTCOMMAND>
 
    *	download the image from the Docker registry [DockerHub]
