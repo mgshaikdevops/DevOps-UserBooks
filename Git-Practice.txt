@@ -324,4 +324,4 @@ Choose Launch method as "SSH"
 Give the private IP of the EC2 slave for "Host"
 Add Credentials, choose Kind as "SSH Username with private key"
 Give user name as "ubuntu" & put the content of "~/.ssh/id_rsa" from master as ubuntu & put it as private key content
-Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"	
+Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"
