@@ -1,0 +1,1405 @@
+PIPELINE :
+=========================================
+agent-->stages-->stage-->steps
+agent-->stages-->stage-->agent-->steps
+
+======================================================================================
+agent-->stages-->stage-->agent-->node-->label 'Build' customworkspace '/tmp/' -->steps
+======================================================================================
+agent--> environment-->stages-->stage-->steps
+agent--> environment-->stages-->stage-->environment-->steps
+===========================================================
+
+==============================================
+directives: parameters
+agent-->parameters-->stages-->stage-->steps-->
+parameters
+      {
+        string(name: 'PERSON', defaultValue: 'Shaik', description: 'who are you?')
+        text(name: 'BIOGRAPTHY', defaultValue: 'Iam an Indian', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: 'true', description:'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One','Two','Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        file(name: 'FILE', description: 'Choose a file to upload')
+      }
+
+steps
+      {
+        echo "Hello ${params.PERSON}"
+        echo "Biography: ${params.BIOGRAPTHY}"
+        echo "Toggle: ${params.TOGGLE}"
+        echo "Choice: ${params.CHOICE}"
+      }
+============================================================
+build discarder :
+agent-->options-->buildDiscarder-->stages-->stage-->steps
+[ options { buildDiscarder(logRotator(numToKeepStr: '5'))} ]
+============================================================
+RETRY:
+agent-->options-->retry-->stages-->stage-->steps
+[ options {retry(3)}      ]
+[ sh 'waitfor test /t 10' ]
+=========================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------
+pipeline
+{
+     agent any
+        stages
+        {
+          stage('Stage1')
+            {
+              steps { echo "First stage" }
+            }
+        }
+}
+------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+  {
+        stage('stage1')
+        {
+          steps { echo "First Stage" }
+        }
+        stage('stage2')
+        {
+          steps { echo "Second Stage" }
+        }
+  }
+}
+
+--------------------------------------------------------------
+pipeline
+{
+  agent { label 'Build'}
+  stages
+  {
+      stage('stage1')
+      {
+      steps { echo "First Stage" }
+      }
+
+      stage('stage2')
+      {
+      steps { echo "Second Stage" }
+      }
+  }
+}
+
+---------------------------------------------------------------
+
+pipeline
+{
+  agent none
+  stages
+  {
+      stage('stage1')
+      {
+      steps { echo "First Stage" }
+      }
+
+      stage('stage2')
+      {
+      steps { echo "Second Stage" }
+      }
+  }
+}
+
+--------------------------------------------------------------------
+
+pipeline
+{
+    agent { label 'Build'}
+    stages
+        {
+            stage('Stage1')
+              {
+                  agent { label 'Test'}
+                  steps { echo "First Stage" }
+              }
+
+            stage('Stage2')
+              {
+                  agent { label 'Build'}
+                  steps { echo "Second Stage" }
+              }
+        }
+
+}
+
+----------------------------------------------------------------------
+
+pipeline
+{
+    agent none
+    stages
+        {
+            stage('Stage1')
+              {
+                  agent { label 'Build'}
+                  steps { echo "First Stage" }
+              }
+
+            stage('Stage2')
+              {
+                  agent any
+                  steps { echo "Second Stage" }
+              }
+        }
+
+}
+
+-------------------------------------------customWorkspace-----------------------------
+
+pipeline
+{
+    agent none
+    stages
+      {
+          stage('Stage1')
+            {
+              agent
+                {
+                  node
+                    {
+                        label 'Build'
+                        customWorkspace '/tmp'
+                    }
+                }
+
+              steps { echo "First Stage" }
+            }
+
+          stage('Stage2')
+            {
+              agent any
+              steps { echo "Second Stage" }
+            }
+      }
+}
+
+-----------------------------------environment------------------------------------
+
+pipeline
+{
+    agent {label 'Build'}
+    environment { MYNAME='Shaik' }
+
+    stages
+    {
+        stage('Build')
+        {
+          steps { sh "echo 'Your Name: $MYNAME' " }
+        }
+    }
+}
+
+---------------------------------environment---------------------------------------
+
+pipeline
+{
+  agent { label 'Test' }
+  environment {MYNAME='Shaik'}
+
+  stages
+  {
+    stage('Build')
+    {
+      agent { label 'Build' }
+      steps { sh "echo Your Name: $MYNAME" }
+    }
+
+    stage ('Test')
+    {
+      agent { label 'Test' }
+      steps { echo env.MYNAME }
+    }
+  }
+}
+
+-------------------------------------environment-----------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  environment { VARVAL = 'global' }
+
+  stages
+  {
+    stage('Build')
+    {
+      environment { VARVAL = 'local'}
+      steps { sh "echo 'Your Name: $VARVAL' " }
+    }
+
+    stage('Test')
+    { steps { echo env.VARVAL } }
+
+  }
+}
+
+------------------------------------------------parameters---------------------------------------------------------------------
+
+pipeline
+{
+  agent {label 'Build'}
+  parameters
+      {
+        string(name: 'PERSON', defaultValue: 'Shaik', description: 'who are you?')
+        text(name: 'BIOGRAPTHY', defaultValue: 'Iam an Indian', description: 'Enter some information about the person')
+        booleanParam(name: 'TOGGLE', defaultValue: 'true', description:'Toggle this value')
+        choice(name: 'CHOICE', choices: ['One','Two','Three'], description: 'Pick something')
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+        file(name: 'FILE', description: 'Choose a file to upload')
+      }
+
+  stages
+    {
+      stage('Build')
+      {
+        steps
+            {
+              echo "Hello ${params.PERSON}"
+              echo "Biography: ${params.BIOGRAPTHY}"
+              echo "Toggle: ${params.TOGGLE}"
+              echo "Choice: ${params.CHOICE}"
+            }
+      }
+    }
+}
+
+-----------------buildDiscarder(number of build jobs to keep and delete rest of the builds)---------------------
+
+pipeline
+{
+  agent { label 'Test' }
+
+  options{ buildDiscarder(logRotator(numToKeepStr: '5')) }
+
+  stages
+      {
+        stage('Test')
+        {
+          steps{ echo "First Test" }
+        }
+      }
+}
+
+-------------------------------retry-----------------------------------------
+
+pipeline
+{
+  agent {label 'Build'}
+  options {retry(3)}
+
+  stages
+      {
+        stage('Build')
+            {
+              steps { sh 'exit 1'  }
+            }
+      }
+}
+
+------------------------------------timeout----------------------------------------
+
+pipeline
+{
+  agent { label 'Test' }
+  options { timeout(time: 5, unit: 'SECONDS') }
+
+  stages
+        {
+          stage('Test')
+          {
+            steps { sh 'waitfor test /t 25' }
+          }
+        }
+}
+
+---------------------------------timestamps--------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build' }
+  options
+      {
+         timeout(time: 5, unit: 'SECONDS')
+         timestamps()
+      }
+
+  stages
+      {
+          stage('Build')
+          {
+            steps { sh 'sleep 10' }
+          }
+      }
+}
+
+----------------------disableConcurrentBuilds(disable multible builds at the same time)---------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  options {
+            disableConcurrentBuilds()
+          }
+
+  stages
+      {
+          stage('Build')
+            {
+              steps { sh 'sleep 10'}
+            }
+      }
+}
+
+--------------------------------------------------triggers------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  triggers { cron('* * * * *') }
+
+  stages
+      {
+        stage('build')
+            {
+              steps { echo 'test'}
+            }
+      }
+}
+
+---------------------------upstream(build after other projects are built)----------------------------------------
+
+pipeline
+{
+    agent { label 'Build' }
+    triggers  { upstream(upstreamProjects: 'FirstJob,MavenProject', threshold: hudson.model.Result.SUCCESS) }
+
+    stages
+        {
+            stage('Build')
+              {
+                steps { echo 'test' }
+              }
+        }
+}
+
+------------------------------------directives:steps----------------------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+    stages
+        {
+            stage('CloneRepo')
+               {
+                    steps
+                        {
+                            echo 'Going to Checkout from git'
+                            git 'https://github.com/mgshaikdevops/MavenProject.git'
+                            echo 'Completed Checkout from git'
+                        }
+                }
+        }
+}
+
+-----------------triggers a new build for a given downstream job & waits for its completion -------------------------------
+
+pipeline
+{
+  agent { label 'Test'}
+  stages
+        {
+            stage('CIFeatX')
+                {
+                  steps { build 'CI-Job-FeatX'}
+                }
+
+            stage('Test')
+                {
+                  steps { echo 'Testing' }
+                }
+        }
+}
+
+-----------------------------------------mail: sending email-------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+
+    stages
+          {
+              stage('Test')
+                  {
+                    steps
+                        {
+                          mail bcc: 'smgouse@gmail.com', body: 'hi', cc: 'gousefx@gmail.com', from: '', replyTo: '', subject: 'Regardig Jenkins Automation ', to: 'mgshaik1@gmail.com'
+                        }
+                  }
+          }
+}
+
+------------------------------------change current directory---------------------------------------------------
+
+pipeline
+{
+    agent { label 'Test'}
+
+    stages
+        {
+            stage('Test')
+                {
+                    steps
+                      {
+                          sh 'touch first'
+                          dir('/tmp/jenkins')
+                            {
+                              sh 'touch testme'
+                              sh 'touch testme2'
+                            }
+                          sh 'touch testlast'
+                      }
+                }
+        }
+}
+
+---------------------------------directives when --------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Test'}
+  environment { DEPLOY_TO = 'QA'}
+
+  stages
+        {
+          stage('Test')
+              {
+                when { environment name: 'DEPLOY_TO', value: 'QA ' }
+                steps { echo 'Running Test for QA' }
+              }
+          stage('Deploy')
+              {
+                when { environment name:'DEPLOY_TO', value:'Production'}
+                steps { echo 'Running Deploy for Production'}
+              }
+        }
+
+
+}
+
+-------------------------------parameters booleanParam-------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Deploy'}
+  parameters { booleanParam defaultValue: true, description: 'Toggle this value', name: 'TOGGLE'}
+  stages
+        {
+          stage('Deploy')
+          {
+            when {expression {return params.TOGGLE}}
+            steps { echo 'Testing'}
+          }
+        }
+}
+---------------------------------parameters when condition allOf-------------------------------------------------------
+
+pipeline
+{
+  agent {label 'Deploy'}
+  parameters
+          {
+            string (defaultValue: 'Shaik', description: 'Who are you?', name: 'Person', trim: false)
+            booleanParam (defaultValue: true, description: 'Toggle this value', name: 'TOGGLE')
+          }
+
+  stages
+        {
+          stage('Deploy')
+                {
+                  when
+                    {
+                      allOf
+                          {
+                            equals expected: 'Shaik', actual:params.PERSON
+                            expression {return params.TOGGLE}
+                          }
+                    }
+                  steps {echo 'hi Shaik'}
+                }
+        }
+}
+
+---------------------------------parallel stages-----------------------------------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('stage1')
+              {
+                  steps { sh 'sleep 10'}
+              }
+          stage('stage2')
+              {
+                  steps { sh 'sleep 10'}
+              }
+          stage('stage3')
+              {
+                parallel
+                  {
+                    stage('stage3.1')
+                    {
+                      steps { sh 'sleep 10'}
+                    }
+                    stage('stage3.2')
+                    {
+                      steps { sh 'sleep 10'}
+                    }
+                  }
+              }
+        }
+}
+
+-----------------------------------post-----------------------------------------------
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('Example')
+          {
+            steps { echo 'Hello Shaik'}
+          }
+        }
+  post
+      {
+        always  { echo 'Hello Shaik again'}
+      }
+}
+
+----------------------------------------------------------------------------------
+
+
+pipeline
+{
+  agent { label 'Build'}
+  stages
+        {
+          stage('Example')
+          {
+            steps { echo 'Hello Shaik'}
+            post
+                {
+                    always  { echo 'Hello Shaik again'}
+                }
+          }
+          stage('Example2')
+          {
+            steps { echo 'Hello Shaik again'}
+          }
+        }
+}
+
+
+----------------------------------gitlab project----------------------------------------------------------
+
+pipeline
+{
+  agent none
+  stages
+   {
+        stage('Checkout')
+          {
+               agent any
+               steps { git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd' }
+          }
+
+        stage('PreCheck')
+          {
+              agent any
+               when
+                 {
+                   anyOf
+                     {
+                       changeset "samplejar/**"
+                       changeset "samplewar/**"
+                     }
+                 }
+               steps
+                  {
+                    script { env.BUILDME = "yes" // Set env variable to enable further Build Stages }
+                  }
+          }
+
+        stage('Build Artifacts')
+          {
+              agent any
+              when {environment name: 'BUILDME', value: 'yes'}
+              steps
+                  {
+                    echo "Building Jar Component ..."
+                    dir("./samplejar")
+                      { sh "mvn clean package ${unitstr}" }
+
+                    echo "Building War Component ..."
+                    dir ("./samplewar")
+                      { sh "mvn clean package " }
+                  }
+          }
+
+    }
+}
+
+
+
+----------------------------------------TOTAL PIPELINE------------------------------------------------------
+pipeline {
+  agent none
+  options {
+     timeout(time: 1, unit: 'HOURS')
+   }
+
+  parameters {
+    booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+	booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')
+  }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+   when {
+     anyOf {
+           changeset "samplejar/**"
+           changeset "samplewar/**"
+     }
+   }
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+  stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+	    if (params.UNITTEST) {
+		  unitstr = ""
+		} else {
+		  unitstr = "-Dmaven.test.skip=true"
+		}
+
+		echo "Building Jar Component ..."
+		dir ("./samplejar") {
+		   sh "mvn clean package ${unitstr}"
+		}
+
+		echo "Building War Component ..."
+		dir ("./samplewar") {
+           sh "mvn clean package "
+		}
+	 }
+   }
+  }
+
+  stage('Code Coverage')
+  {
+   agent { label 'demo' }
+   when {
+     allOf {
+         expression { return params.CODEANALYSIS }
+         environment name: 'BUILDME', value: 'yes'
+     }
+   }
+   steps {
+     echo "Running Code Coverage ..."
+	 dir ("./samplejar") {
+	   sh "mvn org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+	 }
+   }
+  }
+
+  stage('SonarQube Analysis')
+  {
+    agent { label 'demo' }
+    when {environment name: 'BUILDME', value: 'yes'}
+    steps{
+     withSonarQubeEnv('demosonarqube') {
+	  dir ("./samplejar") {
+         sh 'mvn sonar:sonar'
+	  }
+     }
+    }
+  }
+
+  stage("Quality Gate"){
+    when {environment name: 'BUILDME', value: 'yes'}
+    steps{
+	 script {
+	  timeout(time: 10, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+        def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+        if (qg.status != 'OK') {
+           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        }
+      }
+	 }
+    }
+  }
+
+  stage('Stage Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+    script {
+	    /* Define the Artifactory Server details */
+        def server = Artifactory.server 'demoartifactory'
+        def uploadSpec = """{
+            "files": [{
+            "pattern": "samplewar/target/samplewar.war",
+            "target": "democicd"
+            }]
+        }
+
+        /* Upload the war to  Artifactory repo */
+        server.upload(uploadSpec)
+    }
+   }
+  }
+
+  stage ('Deploy'){
+    agent {label 'pilot'}
+	when {environment name: 'BUILDME', value: 'yes'}
+    steps {
+        git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+        step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: false])
+    }
+  }
+
+  stage ('Smoke Test'){
+    agent {label 'pilot'}
+    when {environment name: 'BUILDME', value: 'yes'}
+    steps {
+      sh "sleep 10; chmod +x runsmokes.sh; ./runsmokes.sh"
+    }
+  }
+
+ } //End of Stages
+}
+
+}
+
+------------------------1-Checkout Stage----------------------------------
+
+pipeline {
+  agent none
+  stages
+     {
+          stage('Checkout')
+          {
+               agent { label 'demo' }
+               steps {
+                  git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+               }
+          }
+     }
+}
+
+--------------------------2-Precheck Stage-----------------------------------
+
+pipeline
+{
+  agent none
+  stages
+     {
+            stage('Checkout')
+            {
+                 agent { label 'demo' }
+                 steps {
+                          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+                      }
+            }
+
+            stage('PreCheck')
+           {
+                agent { label 'demo' }
+                when {
+                anyOf {
+                       changeset "samplejar/**"
+                       changeset "samplewar/**"
+                      }
+                     }
+                steps
+                     {
+                        script {env.BUILDME = "yes" // Set env variable to enable further Build Stages }
+                     }
+           }
+
+            }
+}
+
+
+}
+
+
+--------------------------3-Build Artifacts-----------------------------------
+
+pipeline {
+  agent none
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+  stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+
+
+		echo "Building Jar Component ..."
+		dir ("./samplejar") {
+		   sh "mvn clean package "
+		}
+
+		echo "Building War Component ..."
+		dir ("./samplewar") {
+           sh "mvn clean package "
+		}
+	 }
+   }
+  }
+
+
+}
+
+}
+
+----------------------------------------------------
+
+pipeline {
+  agent none
+
+  parameters { booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')  }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+ stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+	    if (params.UNITTEST) {
+		  unitstr = ""
+		} else {
+		  unitstr = "-Dmaven.test.skip=true"
+		}
+
+		echo "Building Jar Component ..."
+		dir ("./samplejar") {
+		   sh "mvn clean package ${unitstr}"
+		}
+
+		echo "Building War Component ..."
+		dir ("./samplewar") {
+           sh "mvn clean package "
+		}
+	 }
+   }
+  }
+
+
+}
+
+}
+
+-----------------------------------Code Coverage---------------------------------------
+
+
+pipeline {
+  agent none
+
+  parameters {
+                booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+                booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')
+             }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+ stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+      if (params.UNITTEST) {
+      unitstr = ""
+    } else {
+      unitstr = "-Dmaven.test.skip=true"
+    }
+
+    echo "Building Jar Component ..."
+    dir ("./samplejar") {
+       sh "mvn clean package ${unitstr}"
+    }
+
+    echo "Building War Component ..."
+    dir ("./samplewar") {
+           sh "mvn clean package "
+    }
+   }
+   }
+  }
+
+  stage('Code Coverage')
+  {
+   agent { label 'demo' }
+   when {
+     allOf {
+         expression { return params.CODEANALYSIS }
+         environment name: 'BUILDME', value: 'yes'
+     }
+   }
+   steps {
+     echo "Running Code Coverage ..."
+   dir ("./samplejar") {
+     sh "mvn org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+   }
+   }
+  }
+
+
+}
+
+}
+
+------------------------------------CODE ANALYSIS-----------------------------------------------
+
+
+pipeline {
+  agent none
+
+  parameters {
+                booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+                booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')
+             }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+ stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+      if (params.UNITTEST) {
+      unitstr = ""
+    } else {
+      unitstr = "-Dmaven.test.skip=true"
+    }
+
+    echo "Building Jar Component ..."
+    dir ("./samplejar") {
+       sh "mvn clean package ${unitstr}"
+    }
+
+    echo "Building War Component ..."
+    dir ("./samplewar") {
+           sh "mvn clean package "
+    }
+   }
+   }
+  }
+
+stage('Code Coverage')
+  {
+   agent { label 'demo' }
+   when {
+     allOf {
+         expression { return params.CODEANALYSIS }
+         environment name: 'BUILDME', value: 'yes'
+     }
+   }
+   steps {
+     echo "Running Code Coverage ..."
+   dir ("./samplejar") {
+     sh "mvn org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+   }
+   }
+  }
+
+
+  stage('SonarQube Analysis')
+    {
+      agent { label 'demo' }
+      when {environment name: 'BUILDME', value: 'yes'}
+      steps{
+       withSonarQubeEnv('demosonarqube') {
+      dir ("./samplejar") {
+           sh 'mvn sonar:sonar'
+      }
+       }
+      }
+    }
+
+
+
+}
+
+}
+
+------------------------------------------Quality Gates--------------------------------------------------------------------------------
+
+
+pipeline {
+  agent none
+
+  parameters {
+                booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+                booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')
+             }
+
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps {
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+ stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {
+     script {
+      if (params.UNITTEST) {
+      unitstr = ""
+    } else {
+      unitstr = "-Dmaven.test.skip=true"
+    }
+
+    echo "Building Jar Component ..."
+    dir ("./samplejar") {
+       sh "mvn clean package ${unitstr}"
+    }
+
+    echo "Building War Component ..."
+    dir ("./samplewar") {
+           sh "mvn clean package "
+    }
+   }
+   }
+  }
+
+  stage('Code Coverage')
+    {
+     agent { label 'demo' }
+     when {
+       allOf {
+           expression { return params.CODEANALYSIS }
+           environment name: 'BUILDME', value: 'yes'
+       }
+     }
+     steps {
+       echo "Running Code Coverage ..."
+     dir ("./samplejar") {
+       sh "mvn org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+     }
+     }
+    }
+
+     stage('SonarQube Analysis')
+      {
+        agent { label 'demo' }
+        when {environment name: 'BUILDME', value: 'yes'}
+        steps{
+         withSonarQubeEnv('demosonarqube') {
+        dir ("./samplejar") {
+             sh 'mvn sonar:sonar'
+        }
+         }
+        }
+      }
+
+
+      stage('Quality Gate'){
+      when {environment name: 'BUILDME', value: 'yes'}
+      steps{
+  	 script {
+  	  timeout(time: 10, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+          def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+          if (qg.status != 'OK') {
+             error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          }
+        }
+  	 }
+      }
+    }
+
+
+  }
+
+  }
+
+-------------------------------------------Stage Artifacts-------------------------------------------------------------------
+
+
+pipeline {
+  agent none
+  
+  parameters { 
+                booleanParam(name: 'UNITTEST', defaultValue: true, description: 'Enable UnitTests ?')
+                booleanParam(name: 'CODEANALYSIS', defaultValue: true, description: 'Enable CODE-ANALYSIS ?')  
+             }
+  
+  stages
+ {
+  stage('Checkout')
+  {
+       agent { label 'demo' }
+       steps { 
+          git branch: 'master', url: 'https://gitlab.com/mgshaikdevops/mycicd'
+       }
+  }
+
+  stage('PreCheck')
+  {
+  agent { label 'demo' }
+   
+   steps {
+       script {
+          env.BUILDME = "yes" // Set env variable to enable further Build Stages
+       }
+   }
+  }
+
+
+ stage('Build Artifacts')
+  {
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps { 
+     script {
+      if (params.UNITTEST) {
+      unitstr = ""
+    } else {
+      unitstr = "-Dmaven.test.skip=true"
+    }
+  
+    echo "Building Jar Component ..."
+    dir ("./samplejar") {
+       sh "mvn clean package ${unitstr}"
+    }
+
+    echo "Building War Component ..."
+    dir ("./samplewar") {
+           sh "mvn clean package "
+    }
+   }
+   }
+  }
+
+stage('Code Coverage')
+  {
+   agent { label 'demo' }
+   when {
+     allOf {
+         expression { return params.CODEANALYSIS }
+         environment name: 'BUILDME', value: 'yes'
+     }
+   }
+   steps {
+     echo "Running Code Coverage ..."  
+   dir ("./samplejar") {
+     sh "mvn org.jacoco:jacoco-maven-plugin:0.5.5.201112152213:prepare-agent"
+   }
+   }
+  }
+
+  stage('SonarQube Analysis') 
+    {
+      agent { label 'demo' }
+      when {environment name: 'BUILDME', value: 'yes'}
+      steps{
+       withSonarQubeEnv('demosonarqube') {
+      dir ("./samplejar") {
+           sh 'mvn sonar:sonar'
+      }
+       } 
+      }
+    }
+
+
+    stage('Quality Gate'){ 
+    when {environment name: 'BUILDME', value: 'yes'}
+    steps{
+	 script {
+	  timeout(time: 10, unit: 'MINUTES') { // Just in case something goes wrong, pipeline will be killed after a timeout
+        def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+        if (qg.status != 'OK') {
+           error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        }
+      }
+	 }
+    }
+  }
+
+stage('Stage Artifacts') 
+  {          
+   agent { label 'demo' }
+   when {environment name: 'BUILDME', value: 'yes'}
+   steps {          
+    script { 
+	    /* Define the Artifactory Server details */
+        def server = Artifactory.server 'demoartifactory'
+        def uploadSpec = """{
+            "files": [{
+            "pattern": "samplewar/target/samplewar.war", 
+            "target": "democicd"                   
+            }]
+        }"""
+        
+        /* Upload the war to  Artifactory repo */
+        server.upload(uploadSpec)
+    }
+   }
+  }
+
+
+
+}
+
+}

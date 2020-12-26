@@ -1,0 +1,18 @@
+Cloud management:  Aws 
+
+Source code Management tool:  Git - GITLAB - GITHUB - Bitbucket 
+
+Project management tool or  BUILD TOOL:   Maven - vagrant
+
+Plugin for CODE COVERAGE: JaCoCo 
+
+Code Quality and Security tool: SonarQube
+
+Jenkins : CICD - Jenkins is a free and open source automation server. It helps automate the parts of software development related to building, testing, and deploying, facilitating continuous integration and continuous delivery.
+
+Docker: CONTAINER MANAGEMENT TOOL
+
+Docker registry: Image Management
+
+Build Artifactory Storage tool:  JFrog Artifactory [old one is nexus] - it Manages Full Artifact Lifecycle.  
+

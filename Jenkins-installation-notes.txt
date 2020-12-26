@@ -1,17 +1,17 @@
 Class 9 Notes: June 16th
 ==================
-$ apt update
-$ apt install -y openjdk-8-jdk
+sudo apt update
+sudo apt install -y openjdk-8-jdk
 
-$ wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
-$ sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
     /etc/apt/sources.list.d/jenkins.list'
 
-$ apt update
-$ apt install -y Jenkins
+sudo apt update
+sudo apt install -y Jenkins
 
 On Master:
-$ ssh-keygen -t rsa
+ssh-keygen -t rsa
 
 Setup Passwordless SSH between Jenkins Master & Slave
 Take the content of ~/.ssh/id_rsa.pub (as ubuntu user) from master

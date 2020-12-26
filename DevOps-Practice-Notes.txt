@@ -1,87 +1,86 @@
-=======================
-VERSION CONTROL SYTEM
-=======================
+--------------------------------------------------------------------------------------------------------------------------------------
+						VERSION CONTROL SYTEM
+--------------------------------------------------------------------------------------------------------------------------------------
 
-Oct2020 Central Repo:	https://github.com/mgshaikdevops/Oct2020.git
+	Oct2020 Central Repo:	https://github.com/mgshaikdevops/Oct2020.git
 
-===============
+
 Configuration:
-===============
-git config --global user.name "mgshaikdevops"
-git config --global user.email "mgshaikdevops@gmail.com"
-git config --global push.default "simple"
 
-========================
+	git config --global user.name "mgshaikdevops"
+	git config --global user.email "mgshaikdevops@gmail.com"
+	git config --global push.default "simple"
+
+
 User/Developer Workflow
-========================
 
-git clone https://github.com/mgshaikdevops/Oct2020.git  [path to download]
 
-create a file and check status 
+	git clone https://github.com/mgshaikdevops/Oct2020.git  [path to download]
+
+create a file and check status
 you can also create a directory and add the files inside the directory
-git add [file] or add . [all files to add ]
-git commit -m "first commit" or second ,thirt etc
 
-git log [for all commit id's] 
-git log -1 [for one and latest commit id]  
-git log --oneline [it will show only single line view]
-git log --oneline [for one and latest commit id]
-git log -num
-git show <commit id>
+	git add [file] or add . [all files to add ]
+	git commit -m "first commit" or second ,thirt etc
+	git log [for all commit id's]
+	git log -1 [for one and latest commit id]
+	git log --oneline [it will show only single line view]
+	git log --oneline [for one and latest commit id]
+	git log -num
+	git show <commit id>
 
-======================================================================================
+
 PUSH TO THE CENTRAL REPOSITORY ONLY WHEN YOU FINISH with your work in local repository
-======================================================================================
-git push OR origin master
-git pull [we have to use pull when we have to update every file from different workspaces]
+
+	git push OR origin master
+	git pull [we have to use pull when we have to update every file from different workspaces]
 
 
-==========================================
+
 BRANCHES switching, Merging and Deleting
-==========================================
 
-git branch [to check on which branch you are]
 
-git branch <new branch name> [to create a new branch]
-when you create a new branch at that time it will add all the files from the parent branch 
+	git branch [to check on which branch you are]
 
-git checkout <branch name> [checkout we use for switching from one branch to another branch]
-[When you create some files in a branch those files will only be in that perticular branch]
+when you create a new branch at that time it will add all the files from the parent branch
+	git branch <new branch name> [to create a new branch]
 
-git merge <source branch> <destination branch(normally it is master in most cases)>
-[it will merge all the files from that branch]
+When you create some files in a branch those files will only be in that perticular branch
+	git checkout <branch name> [checkout we use for switching from one branch to another branch]
 
-[always go to destination(master will be destination branch in most cases) branch and from there you run the command]
-[when you are in destination branch just give source branch]
-git merge <source branch>
+it will merge all the files from that branch
+	git merge <source branch> <destination branch(normally it is master in most cases)>
+
+always go to destination(master will be destination branch in most cases) branch and from there you run the command
+when you are in destination branch just give source branch
+	git merge <source branch>
 
 when you merge it will ask you to write a commit message for your reference then save it in default editor
 
-when you want to merge the same file from the different branches there will be a CONFLIX in that case if it is in 
+when you want to merge the same file from the different branches there will be a CONFLIX in that case if it is in
 -->local repository then it will be a developer most of the time so he must know which one to merge OR if there is some changes then he must do manual merge in the editor and after that file he must commit.
 -->central repository then you must ask for the owner of the repository or who worked with that file.
 
+to merge only single file from that branch for that you must go to the perticular branch and find the commitID
+	git cherry-pick <commitID>
 
-git cherry-pick <commitID> 
-[to merge only single file from that branch for that you must go to the perticular branch and find the commitID]
-
-git branch -d test
+	git branch -d test
 
 
 when you fnish writing your scripts you have to do UNIT TEST.
 
-=====================
+
 STASH (BACKUP & UNDO)
-=====================
+
 
 create stash, remove changes from working directory
-git stash
+	git stash
 
 to list all stash available for the repository
-git stash list
+	git stash list
 
 reapply the changes, remove stash
-git stash pop
+	git stash pop
 
 apply a specific stash from repo
 git stash apply stash@{IndexNumber}
@@ -90,116 +89,116 @@ Idea22 | Idea11 |      |
 Index0   Index1	 Index2  Index3
 
 remove stash from repo
-git stash clear
+	git stash clear
 
-=============
+
 RESET [undo]
-=============
 
-git reset --soft (repository reference)
-git reset --mixed (repo+staging area)
-git reset --hard (repo+SA+WorkingDirectory)
 
-=====
+	git reset --soft (repository reference)
+	git reset --mixed (repo+staging area)
+	git reset --hard (repo+SA+WorkingDirectory)
+
+
 TAGS
-=====
+
 
 Git has the option to tag a commit in the repository history so that you find it easier at a later point in time.
 
 apply tag to a commit:
-git tag -a <pattern> -m 'comment' <commitid>
+	git tag -a <pattern> -m 'comment' <commitid>
 
 contetns of the tag:
-git show <pattern>
+	git show <pattern>
 
 display list of tags available:
-git tag
+	git tag
 
 push the tags:
-git push --tags
+	git push --tags
 
 deletea tag:
-git tag -d <tag> 
+	git tag -d <tag>
 
-=======
+
 REBASE
-=======
+
 step1:
-create test branch
-create a commit ID on master
-create 2 commit ID's on test
-rebase
-git checkout test
-git rebase master
+	create test branch
+	create a commit ID on master
+	create 2 commit ID's on test
+	rebase
+	git checkout test
+	git rebase master
 
 step2:
-git checkout master
-git rebase test
+	git checkout master
+	git rebase test
 
-=========================================
+
 PUSH/PULL changes other than central repo
-=========================================
+
 
 list the remote reference
-git remote -v
+	git remote -v
 
 add a new remote reference
-git remote add <ReferenceName> <NewRemoteURL>
+	git remote add <ReferenceName> <NewRemoteURL>
 
 checkout the source repo branch to a non working branch
-git checkout <branch>
+	git checkout <branch>
 
 pull a change:
-git pull <ReferenceName> <Branch>
+	git pull <ReferenceName> <Branch>
 
 push a change
-git push <ReferenceName> <Branch>
+	git push <ReferenceName> <Branch>
 
 
 Central Repo (BARE) : Store and share
-Local Repo (NONBARE): Modify, store and share
+	Local Repo (NONBARE): Modify, store and share
 
-====================
-BUILD MANAGEMENT
-====================
+-----------------------------------------------------------------------------------------------------------------------------------------------
+												BUILD MANAGEMENT
+------------------------------------------------------------------------------------------------------------------------------------------------
 
 A process where we convert the raw code written by devopers in any of the programming language and converting them in to a machine understanble format and later on we assemble all the files which we have converted in to the machine understanble format and from that we create a software together that complete process we call it as build management or building a product.
 
-===============
+
 build process : 2 steps
-===============
+
 1.compilation: converting java files into class files we call it as compilation.
 2.assembly: creating jar[java archaea]/war[web archaea]/ear[enterprise archaea]
 
-compilation : raw source code ---> object files(binary files) 
-assembly 
+compilation : raw source code ---> object files(binary files)
+assembly
 
 compilation ---> object files(binary files) ---> Packeging ---> Deliverables(JAR, WAR) Build Artifact(application)(machine readable format))
 
-==========================================================================
+
 MAVEN - Project Management Tool - Build tool - Dependency Management Tool
-==========================================================================
+
 
 Maven takes care of complete dependency of our project and it works as a depency management system.
 
 pom.xml: every project must have Maven configuration file along with java files that file we call it as pom.xml
 
-=============
-install java: 
-=============
+
+install java:
+
 sudo apt update
 sudo apt install -y openjdk-8-jdk
 java -version
 
-==============
+
 install maven:
-==============
-apt update 
+
+apt update
 apt install maven
 mvn -version
 
 Create a template of a project:
-=================================
+
 mvn archetype:generate
 
 mvn compile
@@ -209,9 +208,9 @@ mvn install [install step we have to do it only when we want to share the projec
 mvn deploy
 mvn clean [delete the entire target folder to clean the workspace]
 
-======================
+
 CONTINUOS DEVELOPMENT
-======================
+
 
 Release planning
 agile scrum sprint planning
@@ -222,9 +221,9 @@ dockerize the components/product.
 
 TOOLS: GIT - GITHUB - GITLAB - JIRA - DOCKERFILE -JBOSS
 
-=======
+
 GITLAB
-=======
+
 Create account in gitlab.com - cloud
 add an public ssh key (~/.ssh/id_rsa.pub)
 create a project (central repository)
@@ -236,37 +235,37 @@ protect branches
 backup & restore (https://docs.gitlab.com/eeraketasks/backup restore.html)
   sudo gitlab-rake gitlab:backup:create
 
-====================================================
-GITLAB: https://gitlab.com/mgshaikdevops/oct2020.git
-====================================================
 
-===========
+GITLAB: https://gitlab.com/mgshaikdevops/oct2020.git
+
+
+
 CI PROCESS
-===========
+
 
 once developer writes the code(jar,war and etc) he will do the unit test and then he will be checking in the code and he will be pushing the code.
 
 when the developer writes the code in to the repository that will be called as source code.
 
-==============
-BUILD PROCESS: 
-==============
+
+BUILD PROCESS:
+
 software build is a process where we convert the raw source code in to the binary format file which machines can understand.
 
-binary format file : we call this as application 
+binary format file : we call this as application
 
-===============
+
 DEVELOPER BUILD
-===============
+
 gitlab ---> clone ---> source code ---> build 2 steps ---> compilation ---> object files(binary files) ---> Packeging ---> Artifact(application)(jar,war etc) --->  Unit Test(Developer will test after the Artifact(machine readable format)) ---> check in and push to central repository
 
-collection of obj files we call it as deliverable artifact. 
+collection of obj files we call it as deliverable artifact.
 
 Package: combining all the obj files and create a single package.
 
-===================================================
+
 Nightly Build or Full Product Build or Formal Buid
-===================================================
+
 gitlab ---> clone ---> source code ---> build 2 steps ---> compilation ---> object files(binary files) ---> Packeging ---> Deliverables(JAR, WAR) Build Artifact(application)(machine readable format)) ---> THEN GIVE TO THE CUSTOMER.
 
 When we build we get either JAR OR WAR file.
@@ -274,26 +273,26 @@ JAR: JAVA ARCHAEA
 WAR: WEB ARCHAEA
 EAR: ENTERPRISE AECHAEA
 
-=============
+
 TESTING TYPES
-=============
+
 unit testing: done by developers
 ------------
 integration testing: done by automated process [developer if he knows or devops enginner]
 --------------------
 system testing: done by QA testing team
 ---------------
-regression testing:  
+regression testing:
 -------------------
 quick round of testing in which you are going to check weather your old functionties are also working along with the new functionality. u need to merge the code and generate a new build to do this..
 
-user aceeptance testing: 
+user aceeptance testing:
 ------------------------
 before giving it to the customer we check the final testing with a customer(by invitation) (beta versions released called as user acceptance testing)
 
-=========
+
 Jenkins
-=========
+
 
 sudo apt update
 sudo apt install default-jdk
@@ -306,33 +305,33 @@ sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
 sudo apt update
 sudo apt install -y jenkins
 
-sudo systemctl status jenkins 
+sudo systemctl status jenkins
 sudo systemctl start jenkins
 sudo systemctl stop jenkins
 sudo systemctl restart jenkins
 
-==============================================
+
 Windows Linux Subsystem jenkins installation:
-==============================================
+
 sudo apt update
 sudo apt install default-jdk
 sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
 sudo sh -c "echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list"
 sudo apt update
 sudo apt install jenkins
-================================
+
 sudo /etc/init.d/jenkins start
-============================================================
+
 sudo /etc/init.d/jenkins stop or status|restart|force-reload
-============================================================
-http://{your_ip}:8080 
+
+http://{your_ip}:8080
 search ip command: hostname -i
 sudo more /var/lib/jenkins/secrets/initialAdminPassword
 
 LINK: https://medium.com/try-except-finally/install-jenkins-on-wsl-ubuntu-d6cfeec8cd60
 
 On Master:
-sudo  
+sudo
 
 Setup Passwordless SSH between Jenkins Master & Slave
 Take the content of ~/.ssh/id_rsa.pub (as ubuntu user) from master
@@ -344,28 +343,28 @@ Choose Launch method as "SSH"
 Give the private IP of the EC2 slave for "Host"
 Add Credentials, choose Kind as "SSH Username with private key"
 Give user name as "ubuntu" & put the content of "~/.ssh/id_rsa" from master as ubuntu & put it as private key content
-Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"	
+Choose 'Host Key Verification Strategy' as "Manually trusted key verification strategy"
 
 https://www.digitalocean.com/community/tutorials/how-to-install-java-with-apt-on-ubuntu-18-04
 
 
-================================
+
 Configure After the Installation
-================================
+
 
 Configure the system settings:
 ------------------------------
 Home Directory : /var/lib/jenkins [its jenkins home directory where all the jenkins data stored]
 
 Jenkins URL: http://PublicIPAddress:8080/
-Environment variables: 
-Set up on master 
+Environment variables:
+Set up on master
 Name: JAVA_HOME
 Value: /usr/lib/jvm/java-11-openjdk-amd64 [MysystemPath using which java and ls -al ]
 
-=========================
+
 Global Tool Configuration
-=========================
+
 
 Set Up JDK Installations:
 -------------------------
@@ -379,11 +378,11 @@ Name: Mygit[what you like]
 Path to Git executable: /usr/bin/git
 
 
-=======================
-Manage Nodes and Clouds
-=======================
 
-You have to setup nodes based on the Job 
+Manage Nodes and Clouds
+
+
+You have to setup nodes based on the Job
 
 Now Configure Nodes for Build
 
@@ -392,25 +391,25 @@ Nodes/slaves/Machines [When the memory supports you can add many machines ]
 
 I have 2 branches which is CI and Nightly Build Job
 for example:
-one machine have have 5 gb of RAM now if you want to run one task like build task you would requre 2 gb so in this machine we have 2 tasks so in this case you use 4gb so you can only use executors. 
-Executors: 2 
+one machine have have 5 gb of RAM now if you want to run one task like build task you would requre 2 gb so in this machine we have 2 tasks so in this case you use 4gb so you can only use executors.
+Executors: 2
 
 Label : BuildGroup2[set of machines under one group]
 
 Remote Root Directory: /tmp/jenkins [Its up to the organization where they want to make a direcotry i created jenkins directory in tmp]
 
-Host: Private IPv4 addresses 
+Host: Private IPv4 addresses
 
 Now the node machines should have successfully connected to the master.
 
-============================================
+
 Creating and connecting NODES from LOCALHOST
-============================================
+
 create and name the node
 
 Remote root directory: /tmp/jenkins [Create a directory for the jenkins ]
 
-Launch method: 
+Launch method:
 Host: Private IPv4 addresses
 --------------------------------------------------------------------------------------------------------------------
 before adding all the details to the NODE:
@@ -443,16 +442,16 @@ Paste the id that you have copied from id_rsa.pub here and save the file with �
 https://intellipaat.com/community/3952/why-jenkins-says-server-rejected-the-1-private-key-s-while-launching-the-agent
 -----------------------------------------------------------------------------------------------------------------------
 
-Credentials: add credentials using username and password give username and password 
+Credentials: add credentials using username and password give username and password
 
 Now the node machines should have successfully connected to the master.
 
 
 
-=============
+
 Creating Jobs
-=============
-FreeStyle 
+
+FreeStyle
 
 FirstJob:
 
@@ -460,9 +459,9 @@ tick:
 ✅ This project is parameterised
 ✅ Restrict where this project can be run and select the labelgroup
 ✅ Restrict where this project can be run and select the label
-=====================================================================================================================
-✅ Build periodically if you want automate by time for example 
-=====================================================================================================================
+
+✅ Build periodically if you want automate by time for example
+
 MINUTE HOUR DOM MONTH DOW
 MINUTE	Minutes within the hour (0–59)
 HOUR	The hour of the day (0–23)
@@ -475,9 +474,9 @@ To specify multiple values for one field, the following operators are available.
 M-N specifies a range of values
 M-N/X or */X steps by intervals of X through the specified range or whole valid range
 A,B,...,Z enumerates multiple values
-====================================================================================================================
 
-✅ execute shell: 
+
+✅ execute shell:
 command:
 
 echo "HI"  --->BUILD NOW AND IT SHOULD BE SUCCESS.
@@ -491,12 +490,12 @@ downstream dependancy: when the first job finished successfully then the second 
 
 upstream dependency:
 
-Project is parameterized: 
+Project is parameterized:
 DefaultValue: if we give default value for nightly build it will successfully build other wise it will fail.
 
-Trigger when build is: 
+Trigger when build is:
 Stable :when build is successfull or previous execution of the job is successfull.
-Unstable: if it is failing for the first time 
+Unstable: if it is failing for the first time
 Build Fails: If it is continuosly keeps failing
 
 if you give stable then when you run the FirstJob if it fails then the SecondJob will not run
@@ -505,24 +504,24 @@ if you give BuildFails then when you run the FirstJob if it fails then the Secon
 
 -------> when you build it should be invoking to the SecondJob
 
-==============================================
+
 Trigger Parameterized build on other projects:
-==============================================
+
 Current Build Parameters: it will take the current parameters of the the firstjob in that case in second job we must have the same parameters aswell otherwise it will not call the parameters.
 Predefined Parameters: we can define the parameters before the execution in firstjob so that second job will use those parameter values from firstjob.
 
 
 
-==============================================================
+
 CI Build will get triggered Every checkin happends [Poll SCM]
-==============================================================
 
-=============================================================================
+
+
 Nightly build should happened on a fixed scheduled time [Build Periodically]
-=============================================================================
 
 
-CI Job is called as Incremental Build: 
+
+CI Job is called as Incremental Build:
 
 jenkins pipeline:
 
@@ -530,26 +529,26 @@ Pipeline---> Agent[globala value] --> Stages --> Steps
 
 pipeline
 
-==================
+
 logical Operators
-==================
-AND : all of 
+
+AND : all of
 ------------
-true AND true 	= true
-true AND false  = false
-false AND true 	= false
-false AND false = false
+true AND true 	 true
+true AND false   false
+false AND true 	 false
+false AND false  false
 -------------
 OR  : any of
 -------------
-true OR true 	= true
-true OR flase 	= true
-false OR true 	= true
-false OR false 	= false
+true OR true 	 true
+true OR flase 	 true
+false OR true 	 true
+false OR false 	 false
 
-==================
+
 parallel stages
-===================
+
 Stages in Declarative Pipeline may declare a number of nested stages within them, which will be
 executed in parallel. Note that a stage must have one and only one of either steps or parallel. The
 nested stages cannot contain further parallel stages themselves, but otherwise behave the same as
@@ -558,9 +557,9 @@ relevant without steps.
 In addition, you can force your parallel stage`s to all be aborted when one of them fails, by
 adding `failFast true to the stage containing the parallel.
 
-======
+
 post
-======
+
 The post section defines one or more additional steps that are run upon the completion of a
 Pipeline’s or stage’s run (depending on the location of the post section within the Pipeline). post can
 support one of the following post-condition blocks: always, changed, failure, success, unstable, and
@@ -575,11 +574,11 @@ mvn package
 * package
 
 
-=========================   =================================
 
 
 
-==================================	 CONTAINER MANAGEMENT  [DOCKER ]       ================================================================
+
+	 CONTAINER MANAGEMENT  [DOCKER ]
 
 sudo apt update
 sudo apt install -y docker.io
@@ -589,64 +588,226 @@ free -m
 cat /etc/os-release
 df -kh .
 ps -ef
-
+netstat -an | grep 8080
 
 docker images
-docker ps 
+docker ps
 docker ps -a
 exit -- container will stop
 
 
 -----------------------------------  Creating Container ------------------------------------------------------
 
-docker run --name <CONTAINERNAME> -it <ImageName> <FIRSTCOMMAND>
+docker run --name <CONTAINERNAME> -it|-d -p <hp>:<cp> -v <hd>:<cd> <Image> <FIRSTCOMMAND>
 
    *	download the image from the Docker registry [DockerHub]
    *	create a new container
    *	unique id assigned to the container
    *	container will be started
-   
+
    *	attach the container to the terminal interactively
    		docker run -it centos 							-------interactively-----
-   		
+
    *	FIRST COMMAND/SRICPT/APPLICATION WILL BE EXECUTED[/bin/bash will be default if you dont give anything]
 		docker run -it centos /bin/bash						-------First command--------
-		
-   *	Change Container name [--name <CONTAINERNAME>]					-----Change Container name-----
+
+   *	Change Container name [--name <CONTAINERNAME>]					-----Create Container name-----
    		docker run --name FirstContainer -it centos /bin/bash
-   	
-   	
+
+
  -----------------------Start Container again after exit(stopping) -----------------------------------
-   	
+
    	docker start <ContainerID|ContainerName>		-------container will start only but not interactively----------
    *		docker start FirstContainer
-   	
+
    	docker attach <ContainerID|ContainerName>		------- container will enter interactively----------
    *		docker attach FirstCOntainer			------- (make sure add interactively while creating container)-------
-	
+
 	docker stop <ContainerID|ContainerName>			------- container will stop only-----------------
    *		docker stop FirstContainer			------ We can use 'exit' only when we go interactively-------------
-   
+
    *	docker rm <ContainerID|ContainerName>			------ delete container-----------------
    		docker rm FirstContainer			------ Must stop before you delete the container ------------
 
-   *	
+  ----------------------- Create container in detached mode and keep runing the cotainer -------------------------------------
+
+	docker run --name <CONTAINERNAME> -d <ImageName> <FIRSTCOMMAND>
+   *		docker run --name SecondContainer -d centos /bin/bash -c "while true; do echo hello Shaik; sleep 5; done"
+
+   	docker logs <ContainerID|ContainerName>
+   *		docker logs SecondContainer			--------it will print all the current running process in the container--------
+
+	docker logs -f <ContainerID|ContainerName>
+   *		docker logs -f SecondContainer			--------it will print live feed of the process -------------------
+
+   Run the container without Disturbing the current process
+
+	docker exec SecondContainer <command>
+		docker exec SecondContainer echo $PATH
+		docker exec SecondContainer ps -ef
+		docker exec SecondContainer ls
+		docker exec SecondContainer yum update
+
+   *	docker exec -it SecondContainer /bin/bash	------Run the container interactively without Disturbing the current process------
+
+   *	docker exec -it --user root (containerName) /bin/bash  ---------Run the container interactively with root access----------
+
+
+  PORT MAPPING
+
+ 	docker run --name nginx -d -p 80:80 nginx	--------set the port using -p and HostPort:ContainerPort-------------------
+
+
+							DATA VOLUMES [Volume Mapping]
+
+
+
+	Data volumes:	data sharable between the containers aswell as container and host..
+			container<--------->host<--------->container
+
+
+
+CI-Continuous Integration
+
+Gitlab-----------checkoutcode---------->
+github-----------checkoutcode---------->	WebHook
+bitbucket--------checkoutcode---------->
+
+
+Validate Commit[PreCheck]	: 	Set env variable to enable further Build Stages what ever you needed from the developer to bui
+
+								for example:	changeset "samplejar/**" ------>	Only Build when we have changes in perticular project folders.
+            									changeset "samplewar/**"
+
+
+
+Build Artifacts				:	Compilation ---> object files(binary files) ---> Packeging ---> Deliverables(JAR, WAR)
+
+								Build Artifact(application)(machine readable format))
 
 
 
 
+Code Coverage				:	JaCoCo plugin for Code Coverage in Maven
+
+								Code coverage is the percentage of code which is covered by automated tests. Code coverage measurement simply determines which statements in a body of code have been executed through a test run, and which statements have not. In general,
+
+								a code coverage system collects information about the running program and then combines that with source information to generate a report on the test suite's code coverage.
+
+
+Code Analasys 				:	SonarQube plugin after Code Analasys in maven
+
+								Source code analysis is the automated testing of source code for the purpose of debugging a computer program or application before it is distributed or sold. Source code consists of statements created with a text editor or visual programming tool and then saved in a file. The source code is the most permanent form of a program, even though the program may later be modified, improved or upgraded.
+
+								Source code analysis can be either static or dynamic. In static analysis, debugging is done by examining the code without actually executing the program. This can reveal errors at an early stage in program development, often eliminating the need for multiple revisions later. After static analysis has been done, dynamic analysis is performed in an effort to uncover more subtle defects or vulnerabilities. Dynamic analysis consists of real-time program testing.
+
+								A major advantage of this method is the fact that it does not require developers to make educated guesses at situations likely to produce errors. Other advantages include eliminating unnecessary program components and ensuring that the program under test is compatible with other programs likely to be run concurrently.
 
 
 
+								Code Analasys will scan our project and capture the result and publish the result of Code Coverage and Code Analasys on SonarQube plugin.
+
+
+			SonarQube		:	To check the result of Code Coverage and Code Analasys as a dash board for different projects at one place.
+
+								We can create as many projects as we want and store all of them seperately.
+
+
+sudo apt update
+sudo apt install -y docker.io
+docker info
+
+SonarQube: 				docker run -d --name sonarqube  sonarqube -p 9000:9000
+
+Quality Gates				:	Quality gates are predefined milestones where a project is audited to see if it meets the necessary criteria 								 to move into the next phase. ... The purpose of quality gates is to ensure every project follows a set of 									defined rules and best practices to avert common project risks and increase the odds of success.
 
 
 
+------------------------------------------Docker Management---------------------------------------------------------------------
+To Create own image from base image like centos ubuntu and etc.
+		
+		docker commit [containerName] [ImageName]
 
 
+					------------------docker file instructions----------------------------
+
+instructions  	OSCommand/option:
+------------  	------------------
+
+	FROM 		<ImageName>
+	RUN 		<OS-CMD/SCRIPT>
+	CMD			<OS-CMD/SCRIPT> # This will get executed in the beginning during runtime.
+				["Executable", "arg1", "arg2"]
+	ENTRYPOINT 	["Executable", "arg1", "arg2", "arg3"]
+	ENV 		<Environment Variable> <value>
+	USER		<UserID>
+	WORKDIR 	<Directory>
+	COPY		<Host-Src> <Image-destination>		[Single file to copy]
+	ADD 		<Host-Src> <Image-destination>		[Multiple files to copy & also extract tar, jar, war, ear, sar files]
+	EXPOSE		<PORT>
+
+	Example:
+	========
+	FROM centos
+	RUN yum -y update
+	RUN yum install -y vim
+	RUN touch /tmp/DUMMY	 
+	CMD	["/bin/bash"]
+		["/bin/sh", "startup.sh"]
+		["python", "test.py"]
+	ENV JAVA_HOME /opt/jdk.8
+	ENV MYNAME SHAIK
+	USER SHAIK
+	WORKDIR /tmp
+	COPY startup.sh /tmp/startup.sh
+	ADD test.tar /tmp
+
+	ENTRYPOINT ["/bin/sh", "startup.sh"]
+
+	nano Dockerfile
+	copy and paste above date from Example
+
+	docker build -t <ImageName>  <DockerfileFolderLocation>
+							[ or ]
+	docker build -t <ImageName> -f <DOCKERFILE>  . 
 
 
+								===================================
+								Sample Dockerfile to setup Apache2: 
+								===================================
+FROM ubuntu:18.04.5
+MAINTAINER SHAIK
+RUN apt update && apt install -y apache2 && apt clean && rm -rf /var/lib/apt/lists/*
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data 
+ENV APACHE_LOG_DIR /var/log/apache2
+EXPOSE 80
+CMD ["/usr/sbin/apache2","-D","FOREGROUND"]
 
 
+docker build -t apacheimg -f ./Dockerfileapache .
 
+
+										======================
+										Docker Image Creation:
+										======================
+
+docker login <registry>
+
+docker tag <localimage>:<tag> <registry>/<repository>/<image>:<tag>
+docker tag myapache:build102 mgshaikdevops/myapache:build102
+
+docker push <registry>/<repository>/<image>:<tag>
+docker push mgshaikdevops/myapache:build102
+
+										==================
+										JFrog Artifactory:
+										==================
+mkdir -p  ~/jfrog/artifactory/var/etc
+chmod -R 777 ~/jfrog
+touch ~/jfrog/artifactory/var/etc/system.yaml
+sudo chown -R 1030:1030 ~/jfrog/artifactory/var
+
+docker run --name artifactory -d -v ~/jfrog/artifactory/var:/var/opt/jfrog/artifactory -p 8081:8081 -p 8082:8082 docker.bintray.io/jfrog/artifactory-oss:latest
 
 

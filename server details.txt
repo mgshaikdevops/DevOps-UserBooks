@@ -1,0 +1,71 @@
+
+
+Node1 
+=========================
+ssh vagrant@192.168.10.10
+=========================
+
+Node2 
+=========================
+ssh vagrant@192.168.11.11
+=========================
+
+Node3 
+=========================
+ssh vagrant@192.168.15.15
+=========================
+
+
+Docker Nodes:
+
+master: ssh root@172.17.0.4
+Node1:  ssh root@172.17.0.2
+--------------------------------------------
+GitLab Access Token: 
+	CICD:	YHsKnvnz5m1zNyf6xyGw
+	MYCICD:	-W1Xfskw3q3cm2YkVAUz
+  dockercicd: RFsPTZTTfpssxQ8tbXHm
+--------------------------------------------
+
+local: sonarqube token: demoCICD: 046b76caff1dfeb788dd4fd79ff827f1e1955628
+                       
+                       http://127.0.1.1:8080/sonarqube-webhook/
+
+sonarqube token: demoCICD:  91492351aa936a4fa1327a76c0568e5abb176261
+
+make sure dont add / in confi settings it must be like this http://3.238.31.205:9000
+
+=======================================================
+Ansible Tower
+=======================================================
+  
+ssh vagrant@192.168.33.13
+
+  Welcome to Ansible Tower!
+
+  Log into the web interface here:
+
+    https://10.42.0.42/
+
+    Username: admin
+    Password: vfp99x9dHFwU
+
+  The documentation for Ansible Tower is available here:
+
+    http://www.ansible.com/tower/
+
+  For help, visit  http://support.ansible.com/
+==========================================================
+
+
+
+
+
+ansible demo -m copy -a "src=testfile dest=tmp/testfile"
+
+
+ansible_host=<<ec2-private-ip>> ansible_user=<<ec2-user>> ansible_ssh_private_key_file=/location/of/the/keypair/your-key.pem
+
+[demo]
+server1 ansible_host=192.168.33.10 ansible_user=vagrant
+
