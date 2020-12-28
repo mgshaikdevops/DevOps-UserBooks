@@ -1,18 +1,18 @@
 class date-29th received
 ====================
  Install Docker
-$  sudo apt update && apt -y install docker.io
+ sudo apt update && apt -y install docker.io
 
  Install kubectl
-$  curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl &&   chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
+ curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl &&   chmod +x ./kubectl && sudo mv ./kubectl /usr/local/bin/kubectl
 
  Install Minikube
-$  curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
 
  Start Minikube
-$  apt install conntrack
-$  minikube start --vm-driver=none
-$  minikube status
+  apt install conntrack
+  minikube start --vm-driver=none
+  minikube status
 =================================
 filename.yml or filename.yaml
 --- # comment
@@ -48,12 +48,12 @@ spec:                                     # Data which describes the state of th
       command: ["/bin/bash", "-c", "while true; do echo Hello-Ghouse; sleep 5 ; done"]
   restartPolicy: Never         # Defaults to Always
 
-$ kubectl apply -f pod1.yml
-$ kubectl get pods -o wide
-$ kubectl describe pod testpod or kubectl describe pod/testpod
-$ kubectl logs -f testpod -c c00
-$ kubectl delete pod testpod or kubectl delete -f pod2.yml
-$ kubectl exec testpod3 -c c00 -- hostname -i
+ kubectl apply -f pod1.yml
+ kubectl get pods -o wide
+ kubectl describe pod testpod or kubectl describe pod/testpod
+ kubectl logs -f testpod -c c00
+ kubectl delete pod testpod or kubectl delete -f pod2.yml
+ kubectl exec testpod3 -c c00 -- hostname -i
 ========================================
 kind: Pod
 apiVersion: v1
